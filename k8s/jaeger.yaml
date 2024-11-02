@@ -1,0 +1,41 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: jaeger
+spec:
+  ports:
+    - name: "jaeger-query"
+      port: 16686
+      targetPort: 16686
+    - name: "jaeger-collector"
+      port: 14268
+      targetPort: 14268
+    - name: "jaeger-agent"
+      port: 6831
+      protocol: UDP
+      targetPort: 6831
+  selector:
+    app: jaeger
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: jaeger
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: jaeger
+  template:
+    metadata:
+      labels:
+        app: jaeger
+    spec:
+      containers:
+        - name: jaeger
+          image: jaegertracing/all-in-one:1.41
+          ports:
+            - containerPort: 16686
+            - containerPort: 14268
+            - containerPort: 6831
+              protocol: UDP

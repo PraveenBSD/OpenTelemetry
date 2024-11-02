@@ -1,0 +1,9 @@
+fastapi
+uvicorn
+sqlalchemy
+opentelemetry-api
+opentelemetry-sdk
+opentelemetry-exporter-jaeger
+opentelemetry-instrumentation-fastapi
+opentelemetry-instrumentation-sqlalchemy
+psycopg2-binary
