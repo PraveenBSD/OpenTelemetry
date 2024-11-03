@@ -46,7 +46,7 @@ project-root/
 │   ├── postgres.yaml              # PostgreSQL deployment on Kubernetes
 │   └── jaeger.yaml                # Jaeger deployment on Kubernetes
 │
-└── README.md                      # This README file
+└── README.md               # This README file
 ```
 
 ## Setup Guide
@@ -71,9 +71,9 @@ Jaeger collects trace data and offers a UI for visualizing traces.
 
 ### Prerequisites
 
-1. **Docker**: Ensure Docker is installed and running.
-2. **Kubernetes Cluster**: Use Minikube or any Kubernetes setup.
-3. **kubectl**: For managing Kubernetes resources.
+1. **Docker**: Ensure [Docker](https://docs.docker.com/get-docker/) is installed and running.
+2. **Kubernetes Cluster**: Use [Minikube](https://minikube.sigs.k8s.io/docs/start/) or any Kubernetes setup.
+3. **kubectl**: [kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/) for managing Kubernetes resources.
 
 ### Step 1: Build the Docker Image (Optional)
 
@@ -141,11 +141,20 @@ The API server is available on port `8000` (accessible via `http://localhost:800
    Access the API server at `http://localhost:8000`.
 
 #### Test the API Endpoint
+You can test the API endpoints using the following `curl` commands:
 
-Populate the database with sample data, then test the `/users/{user_id}` endpoint:
+1. **Create a User**:
+```bash
+curl -X POST "http://localhost:8000/users/" -H "Content-Type: application/json" -d '{"name": "John Doe", "email": "john.doe@example.com"}'
+```
+2. **Get All Users**:
 
 ```bash
-curl http://localhost:8000/users
+curl -X GET "http://localhost:8000/users/"
+```
+3. **Get User by ID**:
+```bash
+curl -X GET "http://localhost:8000/users/1"
 ```
 
 ## Viewing Traces in Jaeger
@@ -164,6 +173,16 @@ Jaeger will display each trace’s:
 1. **Sample Trace in Jaeger**:
 
    ![Jaeger Trace Screenshot](./screenshots/jaeger_trace.png)
+   The screenshot shows a GET /users request trace with the following breakdown:
+
+   - **Total Duration**: 7.31 ms
+   - **Service & Operation**:
+      - The fastapi_service shows multiple spans corresponding to different operations:
+         - connect: Establishing the database connection.
+         - SELECT mydb: Executing the SQL query to fetch users.
+         - HTTP send spans showing the duration of each stage in the request-response cycle.
+
+   Jaeger UI enables you to see latency for each step, helping in identifying bottlenecks and analyzing application performance.
 
 ## Understanding the Code
 
@@ -219,3 +238,13 @@ SQLAlchemyInstrumentor().instrument(engine=engine)
 ## Conclusion
 
 This setup provides a foundation for monitoring API performance and database interactions in a microservices environment. With OpenTelemetry and Jaeger, you can gain insights into your application's behavior, helping identify performance bottlenecks and improve reliability. Happy tracing!
+
+## Further Reading
+
+To deepen your understanding of OpenTelemetry and tracing, consider exploring these resources:
+
+- **[OpenTelemetry Documentation](https://opentelemetry.io/docs/)**: Official documentation for getting started with OpenTelemetry.
+- **[Jaeger Documentation](https://www.jaegertracing.io/docs/latest/)**: Learn more about Jaeger, its setup, and usage.
+- **[OpenTelemetry Instrumentation for Python](https://opentelemetry-python.readthedocs.io/en/latest/)**: A guide on integrating OpenTelemetry with Python applications.
+- **[Distributed Tracing Basics](https://opentelemetry.io/docs/concepts/signals/traces/)**: Overview of distributed tracing concepts in OpenTelemetry.
+- **[OpenTelemetry No-Code Instrumentation](https://opentelemetry.io/docs/zero-code/)**: Guide on enabling no-code instrumentation to collect telemetry data without modifying application code.
