@@ -135,7 +135,7 @@ The API server is available on port `8000` (accessible via `http://localhost:800
 2. **API Server**:
 
    ```bash
-   kubectl port-forward service/fastapi-server 8000:8000
+   kubectl port-forward service/fastapi-service 8000:80
    ```
 
    Access the API server at `http://localhost:8000`.
@@ -145,12 +145,12 @@ You can test the API endpoints using the following `curl` commands:
 
 1. **Create a User**:
 ```bash
-curl -X POST "http://localhost:8000/users/" -H "Content-Type: application/json" -d '{"name": "John Doe", "email": "john.doe@example.com"}'
+curl -X POST "http://localhost:8000/users" -H "Content-Type: application/json" -d '{"name": "John Doe", "email": "john.doe@example.com"}'
 ```
 2. **Get All Users**:
 
 ```bash
-curl -X GET "http://localhost:8000/users/"
+curl -X GET "http://localhost:8000/users"
 ```
 3. **Get User by ID**:
 ```bash

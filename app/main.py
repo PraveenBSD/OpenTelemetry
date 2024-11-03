@@ -1,4 +1,5 @@
 from fastapi import FastAPI, HTTPException, Depends
+from pydantic import BaseModel
 from sqlalchemy import create_engine, Column, Integer, String
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
@@ -47,6 +48,11 @@ class User(Base):
     name = Column(String, index=True)
     email = Column(String, unique=True, index=True)
 
+# Pydantic model for request body
+class UserCreate(BaseModel):
+    name: str
+    email: str
+
 # Create tables
 Base.metadata.create_all(bind=engine)
 
@@ -78,9 +84,9 @@ def read_user(user_id: int, db: SessionLocal = Depends(get_db)):
         return {"id": user.id, "name": user.name, "email": user.email}
 
 @app.post("/users")
-def create_user(name: str, email: str, db: SessionLocal = Depends(get_db)):
+def create_user(user: UserCreate, db: SessionLocal = Depends(get_db)):
     with tracer.start_as_current_span("create_user"):
-        db_user = User(name=name, email=email)
+        db_user = User(name=user.name, email=user.email)
         db.add(db_user)
         db.commit()
         db.refresh(db_user)
