@@ -80,7 +80,7 @@ Jaeger collects trace data and offers a UI for visualizing traces.
 If you prefer to use a prebuilt image, skip this step. Otherwise, navigate to `api_server` and build the FastAPI Docker image:
 
 ```bash
-cd api_server
+cd app
 docker build -t your-docker-repo/api-server:latest .
 ```
 
